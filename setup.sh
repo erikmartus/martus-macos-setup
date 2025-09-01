@@ -13,7 +13,7 @@ pretty_print "Running initial setup"
 
 if ! command -v brew &>/dev/null; then
     pretty_print "Installing Homebrew, an OSX package manager, follow the instructions..."
-        ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+        /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
     if ! grep -qs "recommended by brew doctor" ~/.zshrc; then
         pretty_print "Put Homebrew location earlier in PATH ..."
@@ -51,6 +51,9 @@ pretty_print "Installing Affinity Photo..."
 pretty_print "Installing Affinity Publisher..."
     brew install --cask affinity-publisher
 
+pretty_print "Installing Figma..."
+    brew install --cask figma
+
 pretty_print "Installing Android Studio..."
     brew install --cask android-studio
 
@@ -78,14 +81,11 @@ pretty_print "Installing Google Chrome..."
 pretty_print "Installing iTerm2..."
     brew install --cask iterm2
 
-pretty_print "Installing Notion..."
-    brew install --cask notion
+pretty_print "Installing Obsidian..."
+    brew install --cask obsidian
 
 pretty_print "Installing Raycast..."
     brew install --cask raycast
-
-pretty_print "Installing Spark..."
-    brew install --cask readdle-spark
 
 pretty_print "Installing Spotify..."
     brew install --cask spotify
@@ -93,21 +93,41 @@ pretty_print "Installing Spotify..."
 pretty_print "Installing VS Code..."
     brew install --cask visual-studio-code
 
+pretty_print "Installing Private Internet Access..."
+    brew install --cask private-internet-access
+
+pretty_print "Installing noTunes..."
+    brew install --cask notunes
+
 pretty_print "Installing Xcode..."
     brew install mas
     mas install 497799835
+
+XCODE_VERSION=`xcodebuild -version | grep '^Xcode\s' | sed -E 's/^Xcode[[:space:]]+([0-9\.]+)/\1/'`
+ACCEPTED_LICENSE_VERSION=`defaults read /Library/Preferences/com.apple.dt.Xcode 2> /dev/null | grep IDEXcodeVersionForAgreedToGMLicense | cut -d '"' -f 2`
+
+if [[ ! "$XCODE_VERSION" = "$ACCEPTED_LICENSE_VERSION" ]]
+then 
+    sudo xcodebuild -license accept
+fi
 
 pretty_print "Setting Arc as default browser..."
     brew install defaultbrowser
     # if this fails run `defaultbrowser` to see available options
     defaultbrowser browser
 
+pretty_print "Installing Canary Mail App..."
+    mas install 1236045954
+
+pretty_print "Installing CrossOver..."
+    brew install --cask crossover
+
 pretty_print "Configuring System Defaults..."
     defaults write com.apple.dock persistent-apps -array
     defaults write com.apple.dock persistent-apps -array-add '<dict><key>tile-data</key><dict><key>file-data</key><dict><key>_CFURLString</key><string>/Applications/Arc.app</string><key>_CFURLStringType</key><integer>0</integer></dict></dict></dict>'
     defaults write com.apple.dock persistent-apps -array-add '<dict><key>tile-data</key><dict><key>file-data</key><dict><key>_CFURLString</key><string>/Applications/Firefox.app</string><key>_CFURLStringType</key><integer>0</integer></dict></dict></dict>'
     defaults write com.apple.dock persistent-apps -array-add '<dict><key>tile-data</key><dict><key>file-data</key><dict><key>_CFURLString</key><string>/Applications/Google Chrome.app</string><key>_CFURLStringType</key><integer>0</integer></dict></dict></dict>'
-    defaults write com.apple.dock persistent-apps -array-add '<dict><key>tile-data</key><dict><key>file-data</key><dict><key>_CFURLString</key><string>/Applications/Spark Desktop.app</string><key>_CFURLStringType</key><integer>0</integer></dict></dict></dict>'
+    defaults write com.apple.dock persistent-apps -array-add '<dict><key>tile-data</key><dict><key>file-data</key><dict><key>_CFURLString</key><string>/Applications/Canary Desktop.app</string><key>_CFURLStringType</key><integer>0</integer></dict></dict></dict>'
     defaults write com.apple.dock persistent-apps -array-add '<dict><key>tile-data</key><dict><key>file-data</key><dict><key>_CFURLString</key><string>/Applications/Visual Studio Code.app</string><key>_CFURLStringType</key><integer>0</integer></dict></dict></dict>'
     defaults write com.apple.dock persistent-apps -array-add '<dict><key>tile-data</key><dict><key>file-data</key><dict><key>_CFURLString</key><string>/Applications/iTerm.app</string><key>_CFURLStringType</key><integer>0</integer></dict></dict></dict>'
     defaults write com.apple.dock persistent-apps -array-add '<dict><key>tile-data</key><dict><key>file-data</key><dict><key>_CFURLString</key><string>/Applications/Affinity Designer 2.app</string><key>_CFURLStringType</key><integer>0</integer></dict></dict></dict>'
@@ -121,6 +141,7 @@ pretty_print "Configuring System Defaults..."
     defaults write com.apple.dock "autohide" -bool "true"
     defaults write com.apple.dock "autohide-time-modifier" -float "0.25"
     defaults write com.apple.dock "mineffect" -string "scale"
+    defaults write com.apple.dock "show-recents" -bool "false"
     killall Dock
 
     defaults write com.apple.menuextra.clock "DateFormat" -string "\"EEE MMM d h:mm a\""
@@ -149,9 +170,8 @@ pretty_print "Setting up dev environment..."
       git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
     fi
     sed -i '' -e '/ZSH_THEME/ s/="[^"][^"]*"/="powerlevel10k\/powerlevel10k"/' ~/.zshrc
-
-    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
-    nvm install node
+    brew install --cask font-fira-code
+    brew install gh
 
 pretty_print "Manual Steps to complete:"
 pretty_print "- [ ] Restart terminal and configure p10k theme"

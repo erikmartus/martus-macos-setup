@@ -11,7 +11,7 @@
 - Arc: `HYPER(F)`
 - Discord: `HYPER(D)`
 - Figma: `HYPER(E)`
-- Spark Desktop: `HYPER(G)`
+- Canary Mail: `HYPER(G)`
 - Spotify: `HYPER(S)`
 - iTerm: `HYPER(T)`
 
@@ -26,9 +26,9 @@
 - Last Two Thirds: `MEH(B)`
 - Left Half: `MEH(S)`
 - Maximize: `MEH(D)`
+- Middle Third: `MEH(W)`
 - Next Display: `MEH(G)`
 - Previous Display: `MEH(A)`
 - Right Half: `MEH(F)`
 - Toggle Fullscreen: `MEH(Space)`
 - Top Third: `MEH(Q)`
-- Top Two Thirds: `MEH(W)`
